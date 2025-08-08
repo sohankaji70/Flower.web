@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Realistic Flower Bloom</title>
+  <style>
+    /* === Body + Background === */
+    body {
+      background: #e0f7fa;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: end;
+      padding-bottom: 50px;
+      font-family: sans-serif;
+    }
+
+    /* Sunlight effect */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top left, #fff9c4 0%, transparent 60%);
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    /* === Cloud Styles === */
+    .cloud {
+      position: absolute;
+      background: #ffffff;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: floatClouds linear infinite;
+      z-index: 0;
+    }
+
+    .cloud::before,
+    .cloud::after {
+      content: '';
+      position: absolute;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+
+    .cloud1 {
+      width: 120px;
+      height: 60px;
+      top: 50px;
+      left: -150px;
+      animation-duration: 60s;
+    }
+
+    .cloud1::before {
+      width: 60px;
+      height: 60px;
+      top: -20px;
+      left: 40px;
+    }
+
+    .cloud1::after {
+      width: 80px;
+      height: 80px;
+      top: -30px;
+      left: 80px;
+    }
+
+    .cloud2 {
+      width: 150px;
+      height: 70px;
+      top: 120px;
+      left: -200px;
+      animation-duration: 90s;
+    }
+
+    .cloud2::before {
+      width: 70px;
+      height: 70px;
+      top: -20px;
+      left: 30px;
+    }
+
+    .cloud2::after {
+      width: 100px;
+      height: 100px;
+      top: -40px;
+      left: 70px;
+    }
+
+    @keyframes floatClouds {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(200vw); }
+    }
+
+    /* === Flower Area === */
+    .garden {
+      display: flex;
+      gap: 50px;
+      align-items: end;
+      margin-bottom: 50px;
+      z-index: 1;
+    }
+
+    .flower {
+      position: relative;
+      width: 100px;
+      height: 200px;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .petal {
+      width: 60px;
+      height: 60px;
+      background: pink;
+      border-radius: 50% 50% 0 0;
+      position: absolute;
+      top: 0;
+      left: 20px;
+      transform-origin: bottom center;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 1s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .bloom .petal {
+      opacity: 1;
+      transform: rotate(var(--angle)) scale(1);
+    }
+
+    .center {
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle, yellow 70%, gold);
+      border-radius: 50%;
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      z-index: 1;
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .stem {
+      position: absolute;
+      width: 10px;
+      height: 120px;
+      background: linear-gradient(to bottom, #388e3c, #2e7d32);
+      left: 45px;
+      bottom: 0;
+      z-index: -1;
+      border-radius: 5px;
+    }
+
+    .leaf {
+      width: 40px;
+      height: 20px;
+      background: linear-gradient(to right, #66bb6a, #43a047);
+      position: absolute;
+      bottom: 60px;
+      border-radius: 50% 50% 0 50%;
+      transform: rotate(-30deg);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .leaf.right {
+      left: 60px;
+      transform: rotate(30deg) scaleX(-1);
+    }
+
+    .leaf.left {
+      left: 0;
+    }
+
+    /* === Buttons === */
+    button {
+      padding: 15px 30px;
+      background: #ff4081;
+      border: none;
+      border-radius: 30px;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, background 0.3s;
+      z-index: 2;
+      margin: 5px;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #f50057;
+    }
+  </style>
+</head>
+<body>
+
+<!-- CLOUDS -->
+<div class="cloud cloud1"></div>
+<div class="cloud cloud2"></div>
+<div class="cloud cloud1" style="top: 80px; animation-delay: 10s;"></div>
+<div class="cloud cloud2" style="top: 160px; animation-delay: 20s;"></div>
+<div class="cloud cloud1" style="top: 100px; left: -250px; animation-delay: 30s;"></div>
+
+<!-- FLOWERS -->
+<div class="garden" id="garden">
+  <!-- Repeat 5 flowers -->
+  <!-- Each flower structure -->
+  <!-- Flower 1 -->
+  <div class="flower">
+    <div class="petal" style="--angle: 0deg;"></div>
+    <div class="petal" style="--angle: 60deg;"></div>
+    <div class="petal" style="--angle: 120deg;"></div>
+    <div class="petal" style="--angle: 180deg;"></div>
+    <div class="petal" style="--angle: 240deg;"></div>
+    <div class="petal" style="--angle: 300deg;"></div>
+    <div class="center"></div>
+    <div class="stem"></div>
+    <div class="leaf left"></div>
+    <div class="leaf right"></div>
+  </div>
+
+  <!-- Flower 2 -->
+  <div class="flower">
+    <div class="petal" style="--angle: 0deg;"></div>
+    <div class="petal" style="--angle: 60deg;"></div>
+    <div class="petal" style="--angle: 120deg;"></div>
+    <div class="petal" style="--angle: 180deg;"></div>
+    <div class="petal" style="--angle: 240deg;"></div>
+    <div class="petal" style="--angle: 300deg;"></div>
+    <div class="center"></div>
+    <div class="stem"></div>
+    <div class="leaf left"></div>
+    <div class="leaf right"></div>
+  </div>
+
+  <!-- Flower 3 -->
+  <div class="flower">
+    <div class="petal" style="--angle: 0deg;"></div>
+    <div class="petal" style="--angle: 60deg;"></div>
+    <div class="petal" style="--angle: 120deg;"></div>
+    <div class="petal" style="--angle: 180deg;"></div>
+    <div class="petal" style="--angle: 240deg;"></div>
+    <div class="petal" style="--angle: 300deg;"></div>
+    <div class="center"></div>
+    <div class="stem"></div>
+    <div class="leaf left"></div>
+    <div class="leaf right"></div>
+  </div>
+
+  <!-- Flower 4 -->
+  <div class="flower">
+    <div class="petal" style="--angle: 0deg;"></div>
+    <div class="petal" style="--angle: 60deg;"></div>
+    <div class="petal" style="--angle: 120deg;"></div>
+    <div class="petal" style="--angle: 180deg;"></div>
+    <div class="petal" style="--angle: 240deg;"></div>
+    <div class="petal" style="--angle: 300deg;"></div>
+    <div class="center"></div>
+    <div class="stem"></div>
+    <div class="leaf left"></div>
+    <div class="leaf right"></div>
+  </div>
+
+  <!-- Flower 5 -->
+  <div class="flower">
+    <div class="petal" style="--angle: 0deg;"></div>
+    <div class="petal" style="--angle: 60deg;"></div>
+    <div class="petal" style="--angle: 120deg;"></div>
+    <div class="petal" style="--angle: 180deg;"></div>
+    <div class="petal" style="--angle: 240deg;"></div>
+    <div class="petal" style="--angle: 300deg;"></div>
+    <div class="center"></div>
+    <div class="stem"></div>
+    <div class="leaf left"></div>
+    <div class="leaf right"></div>
+  </div>
+</div>
+
+<!-- BUTTONS -->
+<button onclick="bloomFlowers()">Tap to see beauty</button>
+<button onclick="resetFlowers()">Back</button>
+
+<!-- JS -->
+<script>
+  function bloomFlowers() {
+    document.querySelectorAll('.flower').forEach(flower => {
+      flower.classList.add('bloom');
+    });
+  }
+
+  function resetFlowers() {
+    document.querySelectorAll('.flower').forEach(flower => {
+      flower.classList.remove('bloom');
+    });
+  }
+</script>
+
+</body>
+</html>
